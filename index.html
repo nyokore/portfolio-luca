@@ -158,6 +158,66 @@
 
   @keyframes fadeIn{ to{ opacity:1; } }
 
+  /* ===================== SWITCH DE IDIOMA ===================== */
+  .lang-switch{
+    position:fixed;
+    top:20px; right:20px;
+    z-index:60;
+    opacity:0;
+    animation: fadeIn 1s var(--ease) 1.1s forwards;
+  }
+  .lang-switch button{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:2px;
+    padding:4px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:rgba(12,10,10,.55);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    cursor:pointer;
+    font-family:'Manrope', sans-serif;
+  }
+  .lang-opt{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+    padding:6px 12px;
+    min-width:66px;          /* ambas opciones iguales: asi la pastilla solo se desplaza */
+    border-radius:999px;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.06em;
+    color:var(--fg-faint);
+    transition:color .35s var(--ease-soft);
+    user-select:none;
+  }
+  .lang-opt .flag{ font-size:13px; line-height:1; }
+  .lang-opt.on{ color:var(--fg); }
+
+  /* La pastilla se desliza SOLO por transform. Animar left/width haria
+     recalcular layout en cada frame — el mismo error que evitamos en el
+     fondo. Las dos opciones miden igual, asi que basta con desplazarla. */
+  .lang-thumb{
+    position:absolute;
+    top:4px; bottom:4px; left:4px;
+    border-radius:999px;
+    background:linear-gradient(135deg, var(--red-bright), var(--red-deep));
+    transition: transform .42s var(--ease);
+    will-change:transform;
+    z-index:1;
+  }
+
+  @media (max-width: 600px){
+    .lang-switch{ top:14px; right:14px; }
+    .lang-opt{ padding:5px 10px; font-size:10px; }
+  }
+
   /* ===================== SECCIONES ===================== */
   section{
     position:relative;
@@ -198,12 +258,19 @@
     backface-visibility:hidden;
   }
   .hero-title{
-    font-size:clamp(48px, 12vw, 148px);
+    font-size:clamp(42px, 11.5vw, 148px);
     font-weight:800;
     line-height:.95;
     display:flex;
     justify-content:center;
     flex-wrap:wrap;
+    column-gap:.28em;        /* el espacio entre palabras, ahora que no hay caracter espacio */
+    row-gap:.04em;
+  }
+  /* cada palabra es una unidad indivisible: el wrap cae entre palabras */
+  .hero-word{
+    display:flex;
+    flex-wrap:nowrap;
   }
   /* cortina: cada letra sube desde detras de su propia mascara */
   .letter-mask{
@@ -250,6 +317,56 @@
     0%,100%{ transform:translate(-50%, 0); }
     50%{ transform:translate(-50%, 9px); }
   }
+
+  /* ===================== TRABAJO DESTACADO ===================== */
+  #featured{ padding-top:clamp(40px, 8vw, 90px); }
+
+  .featured-eyebrow{
+    font-weight:600;
+    font-size:clamp(10px, 1.2vw, 12px);
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--red-bright);
+    margin-bottom:12px;
+  }
+  .featured-title{
+    font-family:'Unbounded', sans-serif;
+    text-transform:uppercase;
+    font-weight:700;
+    letter-spacing:-.01em;
+    font-size:clamp(19px, 3.2vw, 32px);
+    margin-bottom:clamp(22px, 3.5vw, 34px);
+  }
+
+  .featured-video{
+    width:100%;
+    max-width:900px;
+    border-radius:20px;
+    overflow:hidden;                /* recorta el video a las esquinas */
+    line-height:0;                  /* mata el hueco de linea base bajo el video */
+    box-shadow:0 40px 90px -30px rgba(0,0,0,.85);
+  }
+  .featured-video video{
+    display:block;
+    width:100%;
+    height:auto;
+    aspect-ratio:16/9;
+    background:#000;
+    border-radius:20px;             /* Safari ignora el overflow del padre en video */
+  }
+
+  .featured-text{
+    max-width:640px;
+    margin-top:clamp(26px, 4vw, 38px);
+  }
+  .featured-text p{
+    font-size:clamp(14px, 1.6vw, 16.5px);
+    line-height:1.7;
+    color:var(--fg-dim);
+    margin-bottom:16px;
+  }
+  .featured-text p:last-child{ margin-bottom:0; }
+  .featured-text strong{ color:var(--fg); font-weight:700; }
 
   /* ===================== ABOUT ===================== */
   #about p{
@@ -557,6 +674,14 @@
 </svg>
 <div class="vignette"></div>
 
+<div class="lang-switch">
+  <button id="langBtn" type="button" aria-label="Cambiar idioma / Switch language">
+    <span class="lang-opt" data-lang="es"><span class="flag">🇦🇷</span>ES</span>
+    <span class="lang-opt" data-lang="en"><span class="flag">🇺🇸</span>EN</span>
+    <span class="lang-thumb" id="langThumb"></span>
+  </button>
+</div>
+
 <section id="hero">
   <div id="hero-inner">
     <p class="eyebrow">Editor multimedia especializado en IA — Buenos Aires</p>
@@ -564,6 +689,24 @@
     <p class="hero-sub">Contenido generado con IA · Video · Audio · Motion</p>
   </div>
   <p class="scroll-cue">Scroll para ver el trabajo ↓</p>
+</section>
+
+<section id="featured">
+  <p class="featured-eyebrow layer" data-depth="1.1">Último trabajo</p>
+  <h2 class="featured-title layer" data-depth="1.05">Stanley — Termo con mate</h2>
+
+  <div class="featured-video layer" data-depth=".5">
+    <video id="stanleyVideo"
+      src="media/stanley-ad.mp4"
+      poster="media/stanley-poster.jpg"
+      controls loop muted playsinline preload="metadata"></video>
+  </div>
+
+  <div class="featured-text layer" data-depth=".8">
+    <p>Anuncio generado íntegramente con IA. Partí de imágenes reales del producto y escribí un <strong>prompt muy detallado en Claude</strong>, explicando no solo la escena que buscaba sino <strong>qué es el producto</strong> — porque el modelo no puede vender algo que no entiende.</p>
+    <p>Con ese prompt y las imágenes generé el video y sus <strong>efectos de sonido en Seedance</strong>. Después, en edición, sumé la música y el cierre con el logo.</p>
+    <p>La decisión creativa estuvo en el prompt: respetar los <strong>valores de la marca</strong> y apoyarse en <strong>un solo beneficio</strong> — la practicidad de tomar mate en cualquier lado, porque el termo trae el mate en su tapa.</p>
+  </div>
 </section>
 
 <section id="about">
@@ -698,29 +841,193 @@
   var bgSpeed = fullMotion ? 1.0 : 0.45;
   var bgMouse = fullMotion ? 1.0 : 0.40;
 
-  document.getElementById('footerYear').textContent =
-    '© ' + new Date().getFullYear() + ' Luca Lires — Editor multimedia especializado en IA, Buenos Aires';
+  /* ============================================================
+     IDIOMA — ES (Argentina) / EN
+     Los textos viven aca, referenciados por selector, para no llenar
+     el HTML de atributos. [selector, indice, español, ingles]
+     ============================================================ */
+  var ANIO = new Date().getFullYear();
+
+  var TEXTOS = [
+    ['.eyebrow', 0,
+      'Editor multimedia especializado en IA — Buenos Aires',
+      'Multimedia editor specialized in AI — Buenos Aires'],
+    ['.hero-sub', 0,
+      'Contenido generado con IA · Video · Audio · Motion',
+      'AI-generated content · Video · Audio · Motion'],
+    ['.scroll-cue', 0,
+      'Scroll para ver el trabajo ↓',
+      'Scroll to see the work ↓'],
+
+    ['.featured-eyebrow', 0, 'Último trabajo', 'Latest work'],
+    ['.featured-title', 0, 'Stanley — Termo con mate', 'Stanley — Mate Thermos'],
+    ['.featured-text p', 0,
+      'Anuncio generado íntegramente con IA. Partí de imágenes reales del producto y escribí un <strong>prompt muy detallado en Claude</strong>, explicando no solo la escena que buscaba sino <strong>qué es el producto</strong> — porque el modelo no puede vender algo que no entiende.',
+      'An ad generated entirely with AI. I started from real product images and wrote a <strong>highly detailed prompt in Claude</strong>, explaining not just the scene I wanted but <strong>what the product actually is</strong> — because a model can\'t sell something it doesn\'t understand.'],
+    ['.featured-text p', 1,
+      'Con ese prompt y las imágenes generé el video y sus <strong>efectos de sonido en Seedance</strong>. Después, en edición, sumé la música y el cierre con el logo.',
+      'With that prompt and the images I generated the video and its <strong>sound effects in Seedance</strong>. Then, in the edit, I added the music and the closing logo.'],
+    ['.featured-text p', 2,
+      'La decisión creativa estuvo en el prompt: respetar los <strong>valores de la marca</strong> y apoyarse en <strong>un solo beneficio</strong> — la practicidad de tomar mate en cualquier lado, porque el termo trae el mate en su tapa.',
+      'The creative decision lived in the prompt: respect the <strong>brand\'s values</strong> and lean on <strong>a single benefit</strong> — being able to drink mate anywhere, since the thermos carries the mate cup in its lid.'],
+
+    ['#about .section-title', 0, 'Sobre mí', 'About'],
+    ['#about > p', 0,
+      'Soy <strong>editor multimedia especializado en contenido generado con IA</strong>. Vengo de la producción musical — profesional desde 2020, recibido en 2023 en la <strong>Universidad ORT</strong> — y con el tiempo sumé el diseño web y la edición de video hasta cubrir todo el recorrido de una pieza: la idea, el sonido, la imagen y la página donde termina convirtiendo. Hoy ese recorrido lo acelero con IA en cada etapa.',
+      'I\'m a <strong>multimedia editor specialized in AI-generated content</strong>. I come from music production — professional since 2020, with a degree from <strong>Universidad ORT</strong> in 2023 — and over time I added web design and video editing until I covered a piece end to end: the idea, the sound, the image, and the page where it converts. Today I accelerate that whole path with AI at every stage.'],
+    ['#about > p', 1,
+      '<strong>Desde 2021 hago diseño web</strong>, sobre todo landings de producto pensadas para vender, no solo para verse bien. Creé la página oficial de <strong>LUBA Gráficos</strong>, un emprendimiento de impresión de libros, donde además llevé el manejo de redes sociales — de la identidad visual al contenido que la sostiene.',
+      '<strong>I\'ve been doing web design since 2021</strong>, mostly product landing pages built to sell, not just to look good. I built the official site for <strong>LUBA Gráficos</strong>, a book-printing business, where I also ran social media — from the visual identity to the content that sustains it.'],
+    ['#about > p', 2,
+      '<strong>Desde 2022 edito video</strong> para clientes y agencias como <strong>Irregular Creators</strong> y para creadores independientes. Formato reels y TikTok, donde el ritmo y los primeros segundos deciden todo.',
+      '<strong>I\'ve been editing video since 2022</strong> for clients and agencies like <strong>Irregular Creators</strong>, and for independent creators. Short-form for Reels and TikTok, where pacing and the first few seconds decide everything.'],
+    ['#about > p', 3,
+      'En <strong>Pares&amp;co</strong>, una empresa española, llevé adelante las <strong>tiendas de múltiples productos</strong>: ads, landings y contenido, apoyándome en diseño gráfico y generación con IA. Automaticé procesos y potencié tanto las ventas como el conocimiento del equipo.',
+      'At <strong>Pares&amp;co</strong>, a Spanish company, I ran the <strong>stores for multiple products</strong>: ads, landing pages and content, backed by graphic design and AI generation. I automated processes and lifted both sales and the team\'s own know-how.'],
+    ['#about > p', 4,
+      'En paralelo sigo con mi <strong>proyecto como productor musical</strong>, trabajando codo a codo con artistas locales y españoles en su carrera: <strong>composición, lírica, producción, mezcla y mastering</strong>. Es la disciplina que me enseñó a escuchar una pieza entera antes de tocarle una sola parte.',
+      'Alongside that I keep running my <strong>project as a music producer</strong>, working shoulder to shoulder with local and Spanish artists on their careers: <strong>songwriting, lyrics, production, mixing and mastering</strong>. It\'s the discipline that taught me to listen to a whole piece before touching a single part of it.'],
+    ['#about > p', 5,
+      'Me gusta meterme en desafíos nuevos e innovar, y por eso trabajo pegado a las <strong>herramientas de IA</strong> a medida que salen. Un ejemplo: en un video deportivo usé <strong>Claude Code + Remotion</strong> para generar los motion graphics automáticamente desde la transcripción del corte — un trabajo de varios días resuelto en horas.',
+      'I like taking on new challenges and innovating, which is why I stay close to <strong>AI tools</strong> as they come out. One example: on a sports video I used <strong>Claude Code + Remotion</strong> to generate the motion graphics automatically from the transcript of the cut — days of work solved in hours.'],
+
+    ['.cred-label', 0, 'Producción musical', 'Music production'],
+    ['.cred-label', 1, 'Diseño web', 'Web design'],
+    ['.cred-label', 2, 'Edición de video', 'Video editing'],
+
+    ['#work .section-title', 0, 'Trabajos seleccionados', 'Selected work'],
+    ['#phoneHint', 0, '▶ Tocá para reproducir', '▶ Tap to play'],
+
+    ['#sound .section-title', 0, 'Producción musical', 'Music production'],
+    ['#sound > p', 0,
+      'Antes de editar video, edité canciones. Formación académica en producción musical y diseño sonoro — la base de todo lo demás.',
+      'Before I edited video, I edited songs. Formal training in music production and sound design — the foundation for everything else.'],
+
+    ['#contact .section-title', 0, 'Contacto', 'Contact'],
+    ['#contact > p', 0,
+      '¿Tenés un proyecto en mente? Escribime.',
+      'Got a project in mind? Get in touch.'],
+    ['footer span', 0,
+      '© ' + ANIO + ' Luca Lires — Editor multimedia especializado en IA, Buenos Aires',
+      '© ' + ANIO + ' Luca Lires — Multimedia editor specialized in AI, Buenos Aires'],
+    ['footer span', 1,
+      'Contenido con IA · Video · Audio · Motion',
+      'AI content · Video · Audio · Motion']
+  ];
+
+  /* las tabs cambian su rotulo y tambien el pie que muestran al elegirlas */
+  var TABS_T = [
+    { es:'Edición de video', en:'Video editing',
+      capEs:'Edición de video — formato largo, reels y TikTok. Cortes, ritmo y motion graphics.',
+      capEn:'Video editing — long form, Reels and TikTok. Cuts, pacing and motion graphics.' },
+    { es:'Anuncios IA / UGC', en:'AI / UGC ads',
+      capEs:'Anuncios IA / UGC — piezas generadas y editadas con IA para marcas y productos.',
+      capEn:'AI / UGC ads — pieces generated and edited with AI for brands and products.' },
+    { es:'Producción musical', en:'Music production',
+      capEs:'Producción musical — canciones y ediciones de audio propias.',
+      capEn:'Music production — my own songs and audio edits.' }
+  ];
+
+  var META = {
+    es: { title:'Luca Lires — Editor multimedia especializado en IA',
+          desc:'Luca Lires — Editor multimedia especializado en contenido generado con IA. Video, sonido y landings de producto. Buenos Aires.' },
+    en: { title:'Luca Lires — Multimedia Editor Specialized in AI',
+          desc:'Luca Lires — Multimedia editor specialized in AI-generated content. Video, sound and product landing pages. Buenos Aires.' }
+  };
+
+  var langBtn = document.getElementById('langBtn');
+  var langThumb = document.getElementById('langThumb');
+  var langOpts = langBtn.querySelectorAll('.lang-opt');
+  var idioma = 'es';
+
+  function moverThumb(){
+    var activa = langBtn.querySelector('.lang-opt.on');
+    if(!activa) return;
+    /* el ancho se fija una sola vez (ambas opciones miden igual); lo que
+       se anima es solo el desplazamiento, que no toca el layout */
+    langThumb.style.width = activa.offsetWidth + 'px';
+    langThumb.style.transform = 'translateX(' + (activa.offsetLeft - 4) + 'px)';
+  }
+
+  function aplicarIdioma(lang, animarThumb){
+    idioma = lang;
+
+    TEXTOS.forEach(function(t){
+      var nodos = document.querySelectorAll(t[0]);
+      var el = nodos[t[1]];
+      if(el) el.innerHTML = (lang === 'es') ? t[2] : t[3];
+    });
+
+    var tabs = document.querySelectorAll('.tab');
+    TABS_T.forEach(function(t, i){
+      if(!tabs[i]) return;
+      tabs[i].textContent = (lang === 'es') ? t.es : t.en;
+      tabs[i].dataset.caption = (lang === 'es') ? t.capEs : t.capEn;
+      if(tabs[i].classList.contains('active')){
+        var cap = document.getElementById('workCaption');
+        if(cap) cap.textContent = tabs[i].dataset.caption;
+      }
+    });
+
+    document.documentElement.lang = (lang === 'es') ? 'es-AR' : 'en';
+    document.title = META[lang].title;
+    var md = document.querySelector('meta[name="description"]');
+    if(md) md.setAttribute('content', META[lang].desc);
+
+    langOpts.forEach(function(o){ o.classList.toggle('on', o.dataset.lang === lang); });
+
+    if(animarThumb){
+      moverThumb();
+    } else {
+      /* posicion inicial sin animar: apagamos la transicion, forzamos el
+         reflow y la devolvemos en el mismo tick. Con rAF quedaba apagada
+         para siempre si ese frame no llegaba a correr. */
+      langThumb.style.transition = 'none';
+      moverThumb();
+      void langThumb.offsetHeight;
+      langThumb.style.transition = '';
+    }
+
+    try{ localStorage.setItem('lucalires-lang', lang); }catch(err){}
+  }
+
+  langBtn.addEventListener('click', function(){
+    aplicarIdioma(idioma === 'es' ? 'en' : 'es', true);
+  });
+  window.addEventListener('resize', moverThumb, { passive:true });
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(moverThumb);
+
+  /* arranca en el idioma guardado; si nunca eligio, en el del navegador */
+  var langGuardado = null;
+  try{ langGuardado = localStorage.getItem('lucalires-lang'); }catch(err){}
+  if(!langGuardado){
+    langGuardado = (navigator.language || 'es').toLowerCase().indexOf('es') === 0 ? 'es' : 'en';
+  }
+  aplicarIdioma(langGuardado, false);
 
   /* ============================================================
      HERO — cortina letra por letra
      ============================================================ */
+  /* Las letras se agrupan por palabra. Si van sueltas en el flex, en
+     pantallas angostas el salto de linea cae DENTRO de la palabra
+     ("LUCA LIRE / S"); agrupadas, solo puede partir entre palabras. */
   var heroTitle = document.getElementById('hero-title');
-  "LUCA LIRES".split('').forEach(function(ch, i){
-    if(ch === ' '){
-      var sp = document.createElement('span');
-      sp.innerHTML = '&nbsp;';
-      sp.style.display = 'inline-block';
-      heroTitle.appendChild(sp);
-      return;
-    }
-    var mask = document.createElement('span');
-    mask.className = 'letter-mask';
-    var letter = document.createElement('span');
-    letter.className = 'letter';
-    letter.textContent = ch;
-    letter.style.animationDelay = (0.28 + i * 0.055) + 's';
-    mask.appendChild(letter);
-    heroTitle.appendChild(mask);
+  var iLetra = 0;
+  "LUCA LIRES".split(' ').forEach(function(palabra){
+    var wordEl = document.createElement('span');
+    wordEl.className = 'hero-word';
+    palabra.split('').forEach(function(ch){
+      var mask = document.createElement('span');
+      mask.className = 'letter-mask';
+      var letter = document.createElement('span');
+      letter.className = 'letter';
+      letter.textContent = ch;
+      letter.style.animationDelay = (0.28 + iLetra * 0.055) + 's';
+      iLetra++;
+      mask.appendChild(letter);
+      wordEl.appendChild(mask);
+    });
+    heroTitle.appendChild(wordEl);
   });
 
   /* ============================================================
@@ -1130,6 +1437,25 @@
     setTimeout(function(){
       if(!framesPintados) root.classList.add('motion-rescue');
     }, 2000);
+  }
+
+  /* ============================================================
+     TRABAJO DESTACADO — reproduce solo mientras se ve
+     Silenciado: es el unico modo en que los navegadores permiten
+     autoplay. El sonido queda a un clic, en los controles.
+     ============================================================ */
+  var stanley = document.getElementById('stanleyVideo');
+  if(stanley && 'IntersectionObserver' in window){
+    new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          /* si el visitante pidio menos movimiento, no arranca solo */
+          if(fullMotion){ var p = stanley.play(); if(p && p.catch) p.catch(function(){}); }
+        } else {
+          stanley.pause();
+        }
+      });
+    }, { threshold: 0.35 }).observe(stanley);
   }
 
   /* ============================================================
