@@ -368,6 +368,51 @@
   .featured-text p:last-child{ margin-bottom:0; }
   .featured-text strong{ color:var(--fg); font-weight:700; }
 
+  /* el reel de Messi es vertical: marco angosto, no la caja 16:9 */
+  .featured-video.vertical{ max-width:340px; }
+  .featured-video.vertical video{ aspect-ratio:9/16; }
+
+  #featured-messi{ padding-top:clamp(50px, 9vw, 110px); }
+
+  /* ---- carrusel de proceso ---- */
+  .proceso{
+    width:100%;
+    max-width:900px;
+    margin-top:clamp(34px, 5vw, 52px);
+  }
+  .proceso-label{
+    font-weight:600;
+    font-size:clamp(10px, 1.2vw, 12px);
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--fg-faint);
+    margin-bottom:16px;
+  }
+  .proceso-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:clamp(10px, 1.6vw, 18px);
+  }
+  .proceso-grid a{
+    display:block;
+    border-radius:12px;
+    overflow:hidden;
+    border:1px solid var(--line);
+    translate:0 0;
+    transition: translate .4s var(--ease), border-color .35s var(--ease-soft);
+  }
+  .proceso-grid a:hover{ translate:0 -4px; border-color:rgba(242,237,231,.24); }
+  .proceso-grid img{
+    display:block;
+    width:100%;
+    height:auto;
+    aspect-ratio:4/5;
+    object-fit:cover;
+  }
+  @media (max-width: 560px){
+    .proceso-grid{ grid-template-columns:1fr; }
+  }
+
   /* ===================== ABOUT ===================== */
   #about p{
     max-width:680px;
@@ -709,6 +754,39 @@
   </div>
 </section>
 
+<section id="featured-messi">
+  <p class="featured-eyebrow layer" data-depth="1.1">Motion graphics · Storytelling</p>
+  <h2 class="featured-title layer" data-depth="1.05">Messi — Superación</h2>
+
+  <div class="featured-video vertical layer" data-depth=".5">
+    <video id="messiVideo"
+      src="media/messi-reel.mp4"
+      poster="media/messi-poster.jpg"
+      controls loop muted playsinline preload="metadata"></video>
+  </div>
+
+  <div class="featured-text layer" data-depth=".8">
+    <p>Un reel sobre la superación para cumplir un sueño. <strong>Es el trabajo que más me gusta.</strong></p>
+    <p>Escribí el guion con GPT y lo llevé a <strong>ElevenLabs</strong> para la narración. Con el audio ya montado — narración y música — diseñé las escenas: el tiempo estaba definido, así que la animación solo tenía que obedecerlo.</p>
+    <p>Todo es <strong>motion graphics y 3D en After Effects</strong>, sin material filmado de base. Preparé cada imagen en <strong>Photoshop</strong> antes de componer y sumé algunos videos puntuales. Quería que fuera motion graphics, pero más artístico: por eso definí primero la paleta y la música, y recién después animé.</p>
+  </div>
+
+  <div class="proceso layer" data-depth=".7">
+    <p class="proceso-label">El proceso, paso a paso</p>
+    <div class="proceso-grid">
+      <a href="media/proceso-1.jpg" target="_blank" rel="noopener">
+        <img src="media/proceso-1.jpg" alt="Paso 1: el audio primero — guion, narración y música montados antes de animar" loading="lazy">
+      </a>
+      <a href="media/proceso-2.jpg" target="_blank" rel="noopener">
+        <img src="media/proceso-2.jpg" alt="Paso 2: seis colores, una regla — la paleta de la pieza" loading="lazy">
+      </a>
+      <a href="media/proceso-3.jpg" target="_blank" rel="noopener">
+        <img src="media/proceso-3.jpg" alt="Paso 3: escena por escena — motion graphics y 3D en After Effects" loading="lazy">
+      </a>
+    </div>
+  </div>
+</section>
+
 <section id="about">
   <h2 class="section-title layer" data-depth="1.15">Sobre mí</h2>
 
@@ -870,6 +948,19 @@
     ['.featured-text p', 2,
       'La decisión creativa estuvo en el prompt: respetar los <strong>valores de la marca</strong> y apoyarse en <strong>un solo beneficio</strong> — la practicidad de tomar mate en cualquier lado, porque el termo trae el mate en su tapa.',
       'The creative decision lived in the prompt: respect the <strong>brand\'s values</strong> and lean on <strong>a single benefit</strong> — being able to drink mate anywhere, since the thermos carries the mate cup in its lid.'],
+
+    ['.featured-eyebrow', 1, 'Motion graphics · Storytelling', 'Motion graphics · Storytelling'],
+    ['.featured-title', 1, 'Messi — Superación', 'Messi — Rising Above'],
+    ['.featured-text p', 3,
+      'Un reel sobre la superación para cumplir un sueño. <strong>Es el trabajo que más me gusta.</strong>',
+      'A reel about pushing through to reach a dream. <strong>It\'s my favorite piece of work.</strong>'],
+    ['.featured-text p', 4,
+      'Escribí el guion con GPT y lo llevé a <strong>ElevenLabs</strong> para la narración. Con el audio ya montado — narración y música — diseñé las escenas: el tiempo estaba definido, así que la animación solo tenía que obedecerlo.',
+      'I wrote the script with GPT and took it to <strong>ElevenLabs</strong> for the narration. With the audio already laid down — narration and music — I designed the scenes: the timing was set, so the animation only had to follow it.'],
+    ['.featured-text p', 5,
+      'Todo es <strong>motion graphics y 3D en After Effects</strong>, sin material filmado de base. Preparé cada imagen en <strong>Photoshop</strong> antes de componer y sumé algunos videos puntuales. Quería que fuera motion graphics, pero más artístico: por eso definí primero la paleta y la música, y recién después animé.',
+      'It\'s all <strong>motion graphics and 3D in After Effects</strong>, with no filmed footage underneath. I prepared every image in <strong>Photoshop</strong> before compositing, and added a few specific video elements. I wanted motion graphics, but more artistic — so I defined the palette and the music first, and only then animated.'],
+    ['.proceso-label', 0, 'El proceso, paso a paso', 'The process, step by step'],
 
     ['#about .section-title', 0, 'Sobre mí', 'About'],
     ['#about > p', 0,
@@ -1444,18 +1535,20 @@
      Silenciado: es el unico modo en que los navegadores permiten
      autoplay. El sonido queda a un clic, en los controles.
      ============================================================ */
-  var stanley = document.getElementById('stanleyVideo');
-  if(stanley && 'IntersectionObserver' in window){
-    new IntersectionObserver(function(entries){
+  if('IntersectionObserver' in window){
+    var obsVideo = new IntersectionObserver(function(entries){
       entries.forEach(function(e){
         if(e.isIntersecting){
           /* si el visitante pidio menos movimiento, no arranca solo */
-          if(fullMotion){ var p = stanley.play(); if(p && p.catch) p.catch(function(){}); }
+          if(fullMotion){ var p = e.target.play(); if(p && p.catch) p.catch(function(){}); }
         } else {
-          stanley.pause();
+          e.target.pause();
         }
       });
-    }, { threshold: 0.35 }).observe(stanley);
+    }, { threshold: 0.35 });
+    document.querySelectorAll('.featured-video video').forEach(function(v){
+      obsVideo.observe(v);
+    });
   }
 
   /* ============================================================
