@@ -457,16 +457,22 @@
     white-space:nowrap;
   }
 
-  /* ===================== WORK ===================== */
-  .tabs{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    justify-content:center;
-    margin-bottom:40px;
+  /* ===================== TRABAJOS ===================== */
+  .obra-intro{
+    max-width:600px;
+    font-size:clamp(14px, 1.6vw, 16.5px);
+    line-height:1.7;
+    color:var(--fg-dim);
+    margin:-6px auto 26px;
   }
-  .tab{
-    font-family:'Manrope', sans-serif;
+  .obra-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    justify-content:center;
+    margin-bottom:clamp(56px, 9vw, 100px);
+  }
+  .obra-nav a{
     font-weight:600;
     font-size:13px;
     letter-spacing:.03em;
@@ -475,105 +481,275 @@
     border:1px solid var(--line);
     background:rgba(242,237,231,.03);
     color:var(--fg-dim);
-    cursor:pointer;
     translate:0 0;
     transition:
       color .4s var(--ease-soft),
-      background .5s var(--ease-soft),
       border-color .4s var(--ease-soft),
+      background .4s var(--ease-soft),
       translate .45s var(--ease);
   }
-  .tab:hover{ translate:0 -3px; color:var(--fg); border-color:rgba(242,237,231,.22); }
-  .tab.active{
-    background:linear-gradient(135deg, var(--red-bright), var(--red-deep));
+  .obra-nav a:hover{
+    translate:0 -3px;
     color:var(--fg);
-    border-color:transparent;
+    border-color:rgba(242,237,231,.22);
+    background:rgba(139,16,16,.16);
   }
 
-  .viewer-wrap{ perspective:1500px; }
-  .phone{
-    width:min(320px, 78vw);
-    aspect-ratio:9/16;
-    border-radius:32px;
-    border:1px solid var(--line);
-    background:#000;
-    overflow:hidden;
-    position:relative;
-    box-shadow:0 40px 90px -24px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.03) inset;
-    margin:0 auto;
-    transform-style:preserve-3d;
-    will-change:transform;
+  #obraRoot{ width:100%; }
+  .capitulo{
+    width:100%;
+    max-width:1040px;
+    margin:0 auto clamp(90px, 13vw, 160px);
+    scroll-margin-top:40px;
   }
-  .phone iframe{ width:100%; height:100%; border:none; display:block; }
-  .phone-hint{
+  .capitulo:last-child{ margin-bottom:0; }
+
+  .cap-head{ max-width:720px; margin:0 auto clamp(36px, 5vw, 60px); }
+  .cap-kicker{
+    font-weight:600;
+    font-size:clamp(10px, 1.2vw, 12px);
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--red-bright);
+    margin-bottom:12px;
+  }
+  .cap-title{
+    font-family:'Unbounded', sans-serif;
+    text-transform:uppercase;
+    font-weight:800;
+    letter-spacing:-.01em;
+    font-size:clamp(26px, 5vw, 48px);
+    line-height:1.05;
+    margin-bottom:18px;
+  }
+  .cap-text{
+    font-size:clamp(14px, 1.6vw, 16.5px);
+    line-height:1.75;
+    color:var(--fg-dim);
+  }
+  .cap-text strong{ color:var(--fg); font-weight:700; }
+
+  .cap-tools{
+    list-style:none;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:12px;
+    margin-top:26px;
+    text-align:left;
+  }
+  .cap-tools li{
+    padding:14px 16px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    background:rgba(242,237,231,.025);
+    font-size:12.5px;
+    line-height:1.5;
+    color:var(--fg-dim);
+  }
+  .cap-tools b{
+    display:block;
+    font-family:'Unbounded', sans-serif;
+    font-weight:700;
+    font-size:11.5px;
+    letter-spacing:.02em;
+    text-transform:uppercase;
+    color:var(--fg);
+    margin-bottom:5px;
+  }
+  @media (max-width:640px){ .cap-tools{ grid-template-columns:1fr; } }
+
+  /* ---- tarjeta de video: la misma pieza en los tres capitulos ---- */
+  .obra-card{
+    position:relative;
+    display:block;
+    width:100%;
+    aspect-ratio:9/16;
+    padding:0;
+    border:1px solid var(--line);
+    border-radius:16px;
+    overflow:hidden;
+    background:#0d0b0b;
+    cursor:pointer;
+    color:var(--fg);
+    font-family:'Manrope', sans-serif;
+    text-align:left;
+    translate:0 0;
+    transition:
+      translate .45s var(--ease),
+      border-color .35s var(--ease-soft),
+      box-shadow .45s var(--ease-soft);
+  }
+  .obra-card:hover{
+    translate:0 -6px;
+    border-color:rgba(242,237,231,.28);
+    box-shadow:0 28px 50px -22px rgba(0,0,0,.9);
+  }
+  .obra-card:focus-visible{ outline:2px solid var(--red-bright); outline-offset:3px; }
+  .obra-card img,
+  .obra-card video{
     position:absolute;
     inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:rgba(0,0,0,.35);
-    color:var(--fg);
-    font-size:13px;
-    letter-spacing:.04em;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  /* el adelanto aparece recien cuando realmente esta reproduciendo */
+  .obra-card video{ opacity:0; transition:opacity .45s var(--ease-soft); }
+  .obra-card video.on{ opacity:1; }
+  /* degradado para que el pie se lea sobre cualquier imagen */
+  .obra-card.con-pie::after{
+    content:'';
+    position:absolute;
+    inset:auto 0 0 0;
+    height:58%;
+    background:linear-gradient(to top, rgba(0,0,0,.85), transparent);
     pointer-events:none;
-    transition:opacity .5s var(--ease-soft);
+  }
+  .obra-play{
+    position:absolute;
+    top:12px; right:12px;
+    z-index:2;
+    width:32px; height:32px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    padding-left:2px;
+    font-size:10px;
+    background:rgba(12,10,10,.55);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    border:1px solid rgba(242,237,231,.18);
+    scale:1;
+    transition: background .35s var(--ease-soft), scale .35s var(--ease);
+  }
+  .obra-card:hover .obra-play{ background:var(--red-bright); scale:1.08; }
+  .obra-meta{
+    position:absolute;
+    left:12px; right:12px; bottom:12px;
     z-index:2;
   }
-  .phone-hint.hidden{ opacity:0; }
+  .obra-meta-title{ display:block; font-weight:700; font-size:13px; line-height:1.3; }
+  .obra-meta-cap{
+    display:block;
+    margin-top:3px;
+    font-size:11.5px;
+    line-height:1.4;
+    color:rgba(242,237,231,.74);
+  }
 
-  .viewer-controls{
-    display:flex;
+  /* ---- edicion: filas en zigzag, video de un lado y relato del otro ---- */
+  .ed-list{ display:flex; flex-direction:column; gap:clamp(48px, 7vw, 84px); }
+  .ed-row{
+    display:grid;
+    grid-template-columns:minmax(0, 290px) minmax(0, 1fr);
+    gap:clamp(24px, 5vw, 64px);
     align-items:center;
-    justify-content:center;
-    gap:20px;
-    margin-top:22px;
+    text-align:left;
   }
-  .nav-btn{
-    width:42px; height:42px;
-    border-radius:50%;
-    border:1px solid var(--line);
-    background:rgba(242,237,231,.03);
-    color:var(--fg);
-    font-size:14px;
-    cursor:pointer;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    scale:1;
-    transition:
-      scale .35s var(--ease),
-      background .4s var(--ease-soft),
-      border-color .4s var(--ease-soft);
+  .ed-row.inv{ grid-template-columns:minmax(0, 1fr) minmax(0, 290px); }
+  .ed-row.inv .obra-card{ order:2; }
+  .ed-row .obra-card{ max-width:290px; justify-self:center; }
+  .ed-tag{
+    font-weight:600;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--red-bright);
+    margin-bottom:10px;
   }
-  .nav-btn:hover{ scale:1.14; background:rgba(139,16,16,.35); border-color:rgba(139,16,16,.6); }
-  .nav-btn:active{ scale:.96; }
-  .counter{
-    font-size:13px;
+  .ed-title{
+    font-family:'Unbounded', sans-serif;
+    text-transform:uppercase;
+    font-weight:700;
+    font-size:clamp(18px, 2.6vw, 26px);
+    letter-spacing:-.01em;
+    line-height:1.15;
+    margin-bottom:14px;
+  }
+  .ed-text{
+    font-size:clamp(14px, 1.5vw, 16px);
+    line-height:1.75;
     color:var(--fg-dim);
-    min-width:46px;
-    font-variant-numeric:tabular-nums;
-  }
-
-  .caption{
-    margin-top:26px;
     max-width:520px;
-    font-size:14px;
-    color:var(--fg-dim);
-    line-height:1.6;
-    transition:opacity .35s var(--ease-soft);
   }
-  .caption.swapping{ opacity:0; }
+  .ed-tools{ display:flex; flex-wrap:wrap; gap:8px; margin-top:18px; }
+  .ed-tools span{
+    font-size:11px;
+    font-weight:600;
+    padding:6px 12px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    color:var(--fg-dim);
+  }
+  @media (max-width:720px){
+    .ed-row, .ed-row.inv{ grid-template-columns:1fr; text-align:center; }
+    .ed-row.inv .obra-card{ order:0; }
+    .ed-row .obra-card{ max-width:250px; }
+    .ed-text{ margin:0 auto; }
+    .ed-tools{ justify-content:center; }
+  }
 
-  /* ===================== SOUND ===================== */
-  #sound p{
-    max-width:640px;
-    font-size:clamp(15px, 1.7vw, 18px);
-    line-height:1.7;
-    color:var(--fg-dim);
-    margin-bottom:36px;
+  /* ---- grupos (IA y musica) ---- */
+  .obra-grupo{ margin-bottom:clamp(38px, 5vw, 58px); }
+  .obra-grupo:last-child{ margin-bottom:0; }
+  .grupo-head{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:6px 24px;
+    padding-top:18px;
+    margin-bottom:18px;
+    border-top:1px solid var(--line);
+    text-align:left;
   }
-  /* 640px = mismo ancho que los parrafos de la seccion. */
-  .spotify-wrap{ position:relative; width:100%; max-width:640px; }
+  .grupo-title{
+    font-family:'Unbounded', sans-serif;
+    text-transform:uppercase;
+    font-weight:700;
+    font-size:clamp(14px, 1.8vw, 17px);
+    letter-spacing:-.005em;
+  }
+  .grupo-note{
+    font-size:13px;
+    line-height:1.55;
+    color:var(--fg-dim);
+    max-width:470px;
+  }
+
+  /* IA: pared de telefonos */
+  .ia-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));
+    gap:clamp(10px, 1.4vw, 16px);
+  }
+  .ia-grid.cuatro{ grid-template-columns:repeat(4, 1fr); }
+  .ia-grid.dos{ grid-template-columns:repeat(4, 1fr); }
+  @media (max-width:720px){
+    .ia-grid, .ia-grid.cuatro, .ia-grid.dos{ grid-template-columns:repeat(2, 1fr); }
+  }
+
+  /* Musica: carrete horizontal, como se ven los reels en el celular */
+  .mu-strip{
+    display:grid;
+    grid-auto-flow:column;
+    grid-auto-columns:clamp(138px, 17vw, 172px);
+    gap:14px;
+    overflow-x:auto;
+    padding:6px 2px 18px;
+    scroll-snap-type:x mandatory;
+    scrollbar-width:thin;
+    scrollbar-color:rgba(242,237,231,.22) transparent;
+    -webkit-overflow-scrolling:touch;
+  }
+  .mu-strip .obra-card{ scroll-snap-align:start; }
+  .mu-strip .obra-card:hover{ translate:0 -4px; }
+
+  .mu-escuchar{ margin-top:clamp(38px, 5vw, 58px); }
+  .mu-escuchar .grupo-head{ justify-content:center; text-align:center; }
+  /* 640px = mismo ancho que la columna de texto. */
+  .spotify-wrap{ position:relative; width:100%; max-width:640px; margin:0 auto; }
 
   /* 152px es el alto real del embed compacto de Spotify. Forzarlo mas alto
      no agranda el reproductor: deja hueco muerto debajo. Y sin borde propio,
@@ -585,6 +761,116 @@
     height:152px;
     border:none;
     border-radius:12px;
+  }
+
+  /* ---- reproductor a pantalla completa ---- */
+  .obra-modal{
+    border:none;
+    padding:0;
+    margin:0;
+    background:transparent;
+    color:var(--fg);
+    width:100vw;
+    max-width:100vw;
+    height:100vh;
+    height:100dvh;
+    max-height:100dvh;
+  }
+  .obra-modal::backdrop{
+    background:rgba(6,5,5,.88);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+  }
+  .obra-modal[open]{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    animation: modalIn .45s var(--ease);
+  }
+  @keyframes modalIn{ from{ opacity:0; transform:scale(.97); } to{ opacity:1; transform:none; } }
+  .modal-inner{
+    display:flex;
+    align-items:center;
+    gap:clamp(24px, 4vw, 56px);
+    width:100%;
+    max-width:1000px;
+    padding:clamp(18px, 4vw, 40px);
+  }
+  .modal-video{
+    flex:0 0 auto;
+    height:min(84vh, 760px);
+    aspect-ratio:9/16;
+    border-radius:18px;
+    overflow:hidden;
+    background:#000;
+    box-shadow:0 40px 90px -30px rgba(0,0,0,.9);
+  }
+  .modal-video video{ display:block; width:100%; height:100%; object-fit:contain; background:#000; }
+  .modal-info{ flex:1 1 auto; min-width:0; text-align:left; }
+  .modal-count{
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.14em;
+    color:var(--fg-faint);
+    margin-bottom:14px;
+    font-variant-numeric:tabular-nums;
+  }
+  .modal-tag{
+    font-weight:600;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--red-bright);
+    margin-bottom:10px;
+  }
+  .modal-title{
+    font-family:'Unbounded', sans-serif;
+    text-transform:uppercase;
+    font-weight:700;
+    font-size:clamp(20px, 3vw, 30px);
+    line-height:1.12;
+    letter-spacing:-.01em;
+    margin-bottom:16px;
+  }
+  .modal-lead{ font-size:clamp(15px, 1.7vw, 17px); line-height:1.6; color:var(--fg); margin-bottom:12px; }
+  .modal-text{ font-size:clamp(14px, 1.5vw, 15.5px); line-height:1.75; color:var(--fg-dim); }
+  .modal-text strong{ color:var(--fg); }
+  .modal-nav{ display:flex; gap:10px; margin-top:28px; }
+  .modal-btn{
+    font-family:'Manrope', sans-serif;
+    font-weight:600;
+    font-size:12.5px;
+    letter-spacing:.03em;
+    padding:11px 20px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:rgba(242,237,231,.04);
+    color:var(--fg);
+    cursor:pointer;
+    transition: background .35s var(--ease-soft), border-color .35s var(--ease-soft);
+  }
+  .modal-btn:hover{ background:rgba(139,16,16,.35); border-color:rgba(139,16,16,.6); }
+  .modal-close{
+    position:fixed;
+    top:16px; right:16px;
+    width:44px; height:44px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:rgba(12,10,10,.6);
+    color:var(--fg);
+    font-size:18px;
+    line-height:1;
+    cursor:pointer;
+    z-index:5;
+    transition: background .35s var(--ease-soft);
+  }
+  .modal-close:hover{ background:var(--red-bright); }
+  @media (max-width:760px){
+    .obra-modal[open]{ align-items:flex-start; overflow-y:auto; }
+    .modal-inner{ flex-direction:column; align-items:center; padding-top:68px; }
+    .modal-video{ height:auto; width:min(86vw, calc(60vh * 9 / 16)); }
+    .modal-info{ text-align:center; }
+    .modal-nav{ justify-content:center; }
   }
 
   /* ===================== STACK ===================== */
@@ -787,6 +1073,18 @@
   </div>
 </section>
 
+<section id="obra">
+  <h2 class="section-title layer" data-depth="1.15" data-t="obra:titulo"></h2>
+  <p class="obra-intro layer" data-depth=".9" data-t="obra:intro"></p>
+  <nav class="obra-nav layer" data-depth=".8" aria-label="Capítulos">
+    <a href="#cap-edicion" data-t="cap-edicion:t"></a>
+    <a href="#cap-ia" data-t="cap-ia:t"></a>
+    <a href="#cap-musica" data-t="cap-musica:t"></a>
+  </nav>
+  <!-- los capitulos se arman desde el array CAPS del script -->
+  <div id="obraRoot"></div>
+</section>
+
 <section id="about">
   <h2 class="section-title layer" data-depth="1.15">Sobre mí</h2>
 
@@ -809,46 +1107,12 @@
   <p class="layer" data-depth="1">Me gusta meterme en desafíos nuevos e innovar, y por eso trabajo pegado a las <strong>herramientas de IA</strong> a medida que salen. Un ejemplo: en un video deportivo usé <strong>Claude Code + Remotion</strong> para generar los motion graphics automáticamente desde la transcripción del corte — un trabajo de varios días resuelto en horas.</p>
 </section>
 
-<section id="work">
-  <h2 class="section-title layer" data-depth="1.15">Trabajos seleccionados</h2>
-  <div class="tabs layer" data-depth=".9">
-    <button class="tab active" data-list="PLD9yW8DE2ln3zpT4TOB1lT5L_W-DyvoBn" data-caption="Edición de video — formato largo, reels y TikTok. Cortes, ritmo y motion graphics.">Edición de video</button>
-    <button class="tab" data-list="PLD9yW8DE2ln1w04g8p8PpZhu80wH1HRMg" data-caption="Anuncios IA / UGC — piezas generadas y editadas con IA para marcas y productos.">Anuncios IA / UGC</button>
-    <button class="tab" data-list="PLD9yW8DE2ln2jpG4jiMEz8E-jOGGgnJs1" data-caption="Producción musical — canciones y ediciones de audio propias.">Producción musical</button>
-  </div>
-
-  <div class="viewer-wrap layer" data-depth=".45">
-    <div class="phone" id="phone">
-      <div id="yt-player"></div>
-      <div class="phone-hint" id="phoneHint">▶ Tocá para reproducir</div>
-    </div>
-    <div class="viewer-controls">
-      <button class="nav-btn" id="prevBtn">▲</button>
-      <span class="counter" id="counter">1 / 8</span>
-      <button class="nav-btn" id="nextBtn">▼</button>
-    </div>
-    <p class="caption" id="workCaption">Edición de video — formato largo, reels y TikTok. Cortes, ritmo y motion graphics.</p>
-  </div>
-</section>
-
-<section id="sound">
-  <h2 class="section-title layer" data-depth="1.15">Producción musical</h2>
-  <p class="layer" data-depth=".85">Antes de editar video, edité canciones. Formación académica en producción musical y diseño sonoro — la base de todo lo demás.</p>
-  <div class="spotify-wrap layer" data-depth=".6">
-    <!-- embed exacto provisto por Luca: theme=0 es la variante negra -->
-    <iframe id="spotify-embed" data-testid="embed-iframe"
-      src="https://open.spotify.com/embed/playlist/2zKsUjJrWrvSWNZmdrEcrz?utm_source=generator&amp;theme=0&amp;si=63dd8cc75ae345b7"
-      width="100%" height="420" frameBorder="0" allowfullscreen=""
-      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-      loading="lazy"></iframe>
-  </div>
-</section>
-
 <section id="stack">
   <h2 class="section-title layer" data-depth="1.15">Stack</h2>
   <div class="stack-grid" id="stackGrid">
     <span class="pill layer" data-depth=".95">Premiere Pro</span>
     <span class="pill layer" data-depth=".7">After Effects</span>
+    <span class="pill layer" data-depth="1.05">Photoshop</span>
     <span class="pill layer" data-depth="1.1">FL Studio</span>
     <span class="pill layer" data-depth=".8">Pro Tools</span>
     <span class="pill layer" data-depth="1.2">iZotope</span>
@@ -879,6 +1143,23 @@
   <span id="footerYear"></span>
   <span>Contenido con IA · Video · Audio · Motion</span>
 </footer>
+
+<dialog class="obra-modal" id="obraModal" aria-labelledby="modalTitle">
+  <button type="button" class="modal-close" id="modalClose" aria-label="Cerrar">✕</button>
+  <div class="modal-inner" id="modalInner">
+    <div class="modal-video"><video id="modalVideo" controls playsinline preload="none"></video></div>
+    <div class="modal-info">
+      <p class="modal-count" id="modalCount"></p>
+      <p class="modal-tag" id="modalTag"></p>
+      <h3 class="modal-title" id="modalTitle"></h3>
+      <div id="modalBody"></div>
+      <div class="modal-nav">
+        <button type="button" class="modal-btn" id="modalPrev"></button>
+        <button type="button" class="modal-btn" id="modalNext"></button>
+      </div>
+    </div>
+  </div>
+</dialog>
 
 <script>
 (function(){
@@ -918,6 +1199,417 @@
   /* el fondo nunca se congela del todo, solo baja de intensidad */
   var bgSpeed = fullMotion ? 1.0 : 0.45;
   var bgMouse = fullMotion ? 1.0 : 0.40;
+
+  /* ============================================================
+     TRABAJOS — datos
+     Fuente unica: para sumar una pieza, agregar un objeto aca y dejar
+     media/obra/<id>.mp4 y media/obra/<id>.jpg. Todo lo demas (tarjetas,
+     textos ES/EN, reproductor) sale de este array.
+     ============================================================ */
+  var OBRA_T = {};                       /* clave -> { es, en } */
+  function T(key, par){ OBRA_T[key] = { es: par[0], en: par[1] }; }
+
+  T('obra:titulo', ['Trabajos', 'Work']);
+  T('obra:intro', [
+    'Separado en tres, como lo tengo en la cabeza. Pasá el mouse para ver un adelanto y tocá cualquier pieza para verla con sonido.',
+    'Split into three, the way I think about it. Hover for a preview and tap any piece to watch it with sound.'
+  ]);
+  T('modal:prev', ['← Anterior', '← Previous']);
+  T('modal:next', ['Siguiente →', 'Next →']);
+  T('modal:close', ['Cerrar', 'Close']);
+
+  var CAPS = [
+    {
+      id: 'cap-edicion', tipo: 'edicion',
+      kicker: ['After Effects · Premiere Pro · Photoshop', 'After Effects · Premiere Pro · Photoshop'],
+      title:  ['Edición y motion', 'Editing & motion'],
+      text: [
+        'Es donde más me divierto. En <strong>Premiere Pro</strong> armo el esqueleto: el corte, el ritmo, el color y el sonido — que es la mitad de un video aunque nadie lo note. En <strong>After Effects</strong> hago lo que no se puede filmar: motion graphics, tipografía en movimiento, escenas en 3D. Y en <strong>Photoshop</strong> preparo todo antes — mockups, recortes, assets — para que cuando llegue a la línea de tiempo lo único que quede sea animar.',
+        'It\'s where I have the most fun. In <strong>Premiere Pro</strong> I build the skeleton: the cut, the pacing, the color and the sound — which is half of any video, even if nobody notices. In <strong>After Effects</strong> I make what can\'t be filmed: motion graphics, kinetic type, 3D scenes. And in <strong>Photoshop</strong> I prep everything first — mockups, cutouts, assets — so that by the time it hits the timeline, all that\'s left is to animate.'
+      ],
+      tools: [
+        ['After Effects', 'Motion graphics y animación 3D.', 'Motion graphics and 3D animation.'],
+        ['Premiere Pro',  'Edición, ritmo, color y sonido.', 'Editing, pacing, color and sound.'],
+        ['Photoshop',     'Mockups, recortes y assets.',     'Mockups, cutouts and assets.']
+      ],
+      items: [
+        { id: 'ed-messi-maradona',
+          tag: ['Storytelling', 'Storytelling'],
+          title: ['Messi y Maradona', 'Messi & Maradona'],
+          text: [
+            'Dos generaciones en un minuto y medio. Arranco con el gol del 86 en archivo, paso por Diego y por Messi de gala, y cierro en un living: un padre y su hijo frente a la tele. Quería que el final no fuera un dato, sino una escena que cualquiera reconoce de su propia casa.',
+            'Two generations in a minute and a half. I open with the \'86 goal from the archive, move through Diego and a black-tie Messi, and close in a living room: a father and his son in front of the TV. I wanted the ending to be a scene, not a stat — something anyone recognizes from their own home.'
+          ],
+          tools: ['After Effects', 'Premiere Pro', 'Photoshop'] },
+        { id: 'ed-natacion',
+          tag: ['Talking head · Diseño sonoro', 'Talking head · Sound design'],
+          title: ['Consejos de natación', 'Swimming tips'],
+          text: [
+            'Cuatro minutos de alguien hablando a cámara, y el desafío era que nadie se fuera. Lo resolví con cortes al ritmo de la voz, inserts del mar, gráficos que aparecen justo cuando se nombran — como las estadísticas de Strava — y un diseño sonoro que acompaña cada entrada. En el nombre del proyecto quedó escrito: con SFX.',
+            'Four minutes of someone talking to camera, and the challenge was keeping everyone watching. I solved it with cuts on the rhythm of the voice, sea inserts, graphics that land the moment they\'re mentioned — like the Strava stats — and sound design under every entrance. It\'s right there in the project name: with SFX.'
+          ],
+          tools: ['Premiere Pro', 'After Effects', 'SFX'] },
+        { id: 'ed-santa-isabel',
+          tag: ['Inmobiliaria · Dron', 'Real estate · Drone'],
+          title: ['Lotes en El Valle', 'Lots in El Valle'],
+          text: [
+            'Lanzamiento de lotes, todo con tomas de dron. Lo conté como un recorrido: del terreno a las casas terminadas, y del día a la noche, hasta que se prenden las luces del barrio. Tipografía grande, pocas palabras, y el dato que vende — el crédito directo — justo antes del contacto.',
+            'A lot-sale launch, all drone footage. I told it as a journey: from bare land to finished homes, and from day to night, until the neighborhood lights come on. Big type, few words, and the line that sells — direct financing — right before the contact.'
+          ],
+          tools: ['Premiere Pro', 'After Effects'] },
+        { id: 'ed-sillones',
+          tag: ['Kinetic type · Mockups', 'Kinetic type · Mockups'],
+          title: ['Sillones para eventos', 'Chairs for events'],
+          text: [
+            'Sillones de masaje para eventos. El guion es una sola idea — la gente se acuerda de lo que vivió — y la edición la repite de mil formas: tipografía en movimiento, mockups de celular que armé en Photoshop y gente real relajándose, hasta cerrar en un salón listo para la fiesta.',
+            'Massage chairs for events. The script is a single idea — people remember what they lived — and the edit repeats it a hundred ways: kinetic type, phone mockups I built in Photoshop and real people unwinding, until it closes on a hall ready for the party.'
+          ],
+          tools: ['After Effects', 'Photoshop'] },
+        { id: 'ed-visit',
+          tag: ['Turismo · En inglés', 'Travel · In English'],
+          title: ['Entre islas', 'Between islands'],
+          text: [
+            'Un reel de turismo en inglés: yate, atardeceres, fruta en cubierta y un lobo marino tomando sol. Acá la edición es casi invisible a propósito — cortes limpios, subtítulos chiquitos y el ritmo del mar marcando todo. Si se nota el editor, se pierde el viaje.',
+            'A travel reel in English: a yacht, sunsets, fruit on deck and a sea lion sunbathing. The edit is almost invisible on purpose — clean cuts, small subtitles and the rhythm of the sea setting the pace. If you notice the editor, you lose the trip.'
+          ],
+          tools: ['Premiere Pro'] },
+        { id: 'ed-glow-kit',
+          tag: ['Alta retención · En inglés', 'High retention · In English'],
+          title: ['Glow Kit', 'Glow Kit'],
+          text: [
+            'Un creador explicando estrategia de ofertas, y cada idea tiene su gráfico: íconos en verde neón, un bundle que se arma en pantalla, la palabra clave resaltada en el subtítulo. Es el formato que más me gusta construir: si le sacás el audio, el video igual se entiende.',
+            'A creator breaking down offer strategy, and every idea gets its own graphic: neon-green icons, a bundle that builds itself on screen, the key word highlighted in the subtitle. It\'s the format I most enjoy building: mute it and it still makes sense.'
+          ],
+          tools: ['After Effects', 'Premiere Pro'] },
+        { id: 'ed-cerberus',
+          tag: ['Clip de podcast · En inglés', 'Podcast clip · In English'],
+          title: ['¿El ayuno es malo para las mujeres?', 'Is fasting harmful for women?'],
+          text: [
+            'Un clip de podcast convertido en pieza vertical. Tipografía en magenta y verde, un plato que se vuelve reloj, pantallas partidas y siluetas para las partes más delicadas del tema. La consigna: que ningún segundo quede quieto, pero sin que se vuelva ruido.',
+            'A podcast clip turned into a vertical piece. Magenta and green type, a plate that turns into a clock, split screens and silhouettes for the more sensitive parts of the topic. The rule: no second left still, without it turning into noise.'
+          ],
+          tools: ['After Effects', 'Premiere Pro'] }
+      ]
+    },
+    {
+      id: 'cap-ia', tipo: 'grilla',
+      kicker: ['Generación con IA · Voz · Subtítulos', 'AI generation · Voice · Subtitles'],
+      title:  ['Anuncios con IA', 'AI ads'],
+      text: [
+        'Anuncios para ecommerce de moda y calzado, pensados para Meta. Genero las escenas y las voces con IA, pero lo que importa no es la herramienta: es decidir qué cambia entre una versión y otra. Meta agrupa los anuncios que se parecen, así que una variante de verdad no es otro subtítulo sobre el mismo plano — es <strong>otra persona, otro lugar, otro ángulo</strong>.',
+        'Fashion and footwear ecommerce ads, built for Meta. I generate scenes and voices with AI, but the tool isn\'t what matters: it\'s deciding what changes from one version to the next. Meta groups ads that look alike, so a real variant isn\'t a new subtitle over the same shot — it\'s <strong>another person, another place, another angle</strong>.'
+      ],
+      grupos: [
+        { clase: 'cuatro',
+          title: ['Un jean, cuatro hipótesis', 'One pair of jeans, four hypotheses'],
+          note: [
+            'El mismo producto en la calle, en una terraza, en un estudio y como nota callejera. Para Meta son cuatro anuncios distintos, no uno repetido.',
+            'The same product on the street, on a terrace, in a studio and as a street interview. To Meta, that\'s four different ads — not one repeated.'
+          ],
+          items: [
+            { id: 'ia-jean-calle',      title: ['En la calle', 'On the street'],       cap: ['Caminando por el centro, a pleno sol.', 'Walking downtown in full sun.'] },
+            { id: 'ia-jean-terraza',    title: ['En la terraza', 'On the terrace'],    cap: ['Hora dorada y el encaje en primer plano.', 'Golden hour, lace in close-up.'] },
+            { id: 'ia-jean-estudio',    title: ['En el estudio', 'In the studio'],     cap: ['Luz suave para mostrar el tejido.', 'Soft light to show the fabric.'] },
+            { id: 'ia-jean-entrevista', title: ['Nota callejera', 'Street interview'], cap: ['Arranca con un «Oye, perdona…».', 'It opens with an «Excuse me…».'] }
+          ] },
+        { clase: 'dos',
+          title: ['Un vestido, dos mundos', 'One dress, two worlds'],
+          note: [
+            'La misma prenda en un living luminoso y en un patio mediterráneo, en portugués.',
+            'The same piece in a bright living room and a Mediterranean courtyard, in Portuguese.'
+          ],
+          items: [
+            { id: 'ia-vestido-salon', title: ['Salón', 'Living room'], cap: ['Elegancia de interior.', 'Indoor elegance.'] },
+            { id: 'ia-vestido-patio', title: ['Patio', 'Courtyard'],   cap: ['Mismo vestido, otro verano.', 'Same dress, a different summer.'] }
+          ] },
+        { clase: '',
+          title: ['Más anuncios', 'More ads'],
+          note: [
+            'Un hook distinto para cada producto: el detalle, el dolor, el unboxing o el espejo.',
+            'A different hook for every product: the detail, the pain point, the unboxing or the mirror.'
+          ],
+          items: [
+            { id: 'ia-zapato-trabajo',     title: ['Zapato de trabajo', 'Work shoe'],         cap: ['Directo al dolor: los zapatos rígidos que destrozan.', 'Straight to the pain: stiff shoes that wreck your feet.'] },
+            { id: 'ia-mocasines',          title: ['Mocasines', 'Loafers'],                   cap: ['Del detalle en la mano al outfit completo.', 'From the detail in hand to the full outfit.'] },
+            { id: 'ia-zapatillas-blancas', title: ['Zapatillas blancas', 'White sneakers'],   cap: ['Demo en mano: color, suela y cómo combinan.', 'Hands-on demo: color, sole and how they pair.'] },
+            { id: 'ia-unboxing',           title: ['Unboxing', 'Unboxing'],                   cap: ['Sacarlas de la caja, sin más vueltas.', 'Straight out of the box.'] },
+            { id: 'ia-sujetador-negro',    title: ['Cierre frontal', 'Front closure'],        cap: ['UGC a cámara, con el cierre en detalle.', 'UGC to camera, with the closure in detail.'] },
+            { id: 'ia-sujetador-gris',     title: ['Sujetador de algodón', 'Cotton bra'],     cap: ['Tirantes, broches y ajuste, de cerca.', 'Straps, hooks and fit, up close.'] },
+            { id: 'ia-vestido-colores',    title: ['Cuatro colores', 'Four colors'],          cap: ['Selfie al espejo y un color por plano.', 'Mirror selfie, one color per shot.'] },
+            { id: 'ia-pantalon-sastre',    title: ['Pantalón sastre', 'Tailored trousers'],   cap: ['En portugués, un color por escena.', 'In Portuguese, one color per scene.'] },
+            { id: 'ia-pantalon-nautico',   title: ['Pantalón náutico', 'Nautical trousers'],  cap: ['Espejo, luz de mañana y rayas.', 'Mirror, morning light and stripes.'] },
+            { id: 'ia-faja',               title: ['Faja', 'Shapewear'],                      cap: ['Frente al espejo, en dos colores.', 'In the mirror, in two colors.'] }
+          ] }
+      ]
+    },
+    {
+      id: 'cap-musica', tipo: 'carrete', spotify: true,
+      kicker: ['FL Studio · Mezcla · Mastering', 'FL Studio · Mixing · Mastering'],
+      title:  ['Producción musical', 'Music production'],
+      text: [
+        'Produzco como <strong>PAMPA</strong> desde 2020. Estos reels son de mi cuenta: arriba yo en el estudio, abajo el proyecto abierto, y la edición marcando cada parte del tema. Los monto con el mismo cuidado que una pieza de cliente, porque también tienen que retener. Antes de editar video, edité canciones: es la base de todo lo demás.',
+        'I\'ve been producing as <strong>PAMPA</strong> since 2020. These reels are from my account: me in the studio on top, the open project below, and the edit marking every section of the track. I cut them with the same care as client work, because they also have to hold attention. Before I edited video, I edited songs: it\'s the foundation for everything else.'
+      ],
+      grupos: [
+        { title: ['Detrás de la mezcla', 'Behind the mix'],
+          note: [
+            'Tutoriales cortos: lo que hago antes de grabar, cómo hago que pegue una batería, de dónde salen las texturas.',
+            'Short tutorials: what I do before recording, how I make drums hit, where the textures come from.'
+          ],
+          items: [
+            { id: 'mu-antes-de-voces', title: ['Antes de grabar voces', 'Before recording vocals'], cap: ['Quitar ruido, gate y afinación.', 'Noise removal, gate and tuning.'] },
+            { id: 'mu-drums',          title: ['Drums potentes', 'Hard-hitting drums'],          cap: ['Que la batería pegue sin tapar el resto.', 'Drums that hit without burying the rest.'] },
+            { id: 'mu-beats-potentes', title: ['Beats potentes', 'Heavier beats'],               cap: ['El antes y el después de una mezcla.', 'A mix, before and after.'] },
+            { id: 'mu-texturas',       title: ['Texturas', 'Textures'],                         cap: ['Capas y reverbs para que el beat respire.', 'Layers and reverbs so the beat breathes.'] },
+            { id: 'mu-samples',        title: ['Samples', 'Samples'],                           cap: ['Un tema entero a partir de un sample.', 'A whole track from one sample.'] }
+          ] },
+        { title: ['Beats', 'Beats'],
+          note: [
+            'Type beats, samples inesperados y beats armados de cero, parte por parte.',
+            'Type beats, unexpected samples and beats built from scratch, section by section.'
+          ],
+          items: [
+            { id: 'mu-feid',          title: ['Cariño', 'Cariño'],                        cap: ['Type beat Feid x Mora, con loop propio.', 'Feid x Mora type beat, with my own loop.'] },
+            { id: 'mu-claroscuro',    title: ['Claroscuro', 'Claroscuro'],                cap: ['Type beat Milo J x Trueno: intro, puente, precoro, coro.', 'Milo J x Trueno type beat: intro, bridge, pre-chorus, chorus.'] },
+            { id: 'mu-cardumen',      title: ['Cardumen', 'Cardumen'],                    cap: ['Type beat Milo J: sample, keys, violín y 808.', 'Milo J type beat: sample, keys, violin and 808.'] },
+            { id: 'mu-cars',          title: ['Sampleando Cars', 'Sampling Cars'],        cap: ['Del tema de la película a un beat.', 'From the movie theme to a beat.'] },
+            { id: 'mu-anthem',        title: ['Beat completo', 'Full beat'],              cap: ['Del primer sonido al beat terminado.', 'From the first sound to the finished beat.'] },
+            { id: 'mu-beat-de-cero',  title: ['Beat de cero', 'Beat from scratch'],       cap: ['Un minuto, un beat nuevo.', 'One minute, one new beat.'] },
+            { id: 'mu-loops',         title: ['Loops', 'Loops'],                          cap: ['Melodía, texturas y resultado.', 'Melody, textures and result.'] },
+            { id: 'mu-loop-sad',      title: ['Loop sad', 'Sad loop'],                    cap: ['Un loop para que otro productor lo termine.', 'A loop for another producer to finish.'] },
+            { id: 'mu-tu-foto',       title: ['Tu Foto', 'Tu Foto'],                      cap: ['Tiago PZK ft. Milo J, pista por pista.', 'Tiago PZK ft. Milo J, track by track.'] },
+            { id: 'mu-tu-foto-promo', title: ['Tu Foto — adelanto', 'Tu Foto — teaser'],  cap: ['La versión corta.', 'The short version.'] },
+            { id: 'mu-letra',         title: ['Escribí esta letra', 'I wrote these lyrics'], cap: ['Esta vez, del otro lado del micrófono.', 'This time, on the other side of the mic.'] }
+          ] },
+        { title: ['Un beat por día', 'A beat a day'],
+          note: [
+            'Una serie de lunes a viernes: siete segundos para mostrar un beat antes de que pases de largo.',
+            'A Monday-to-Friday series: seven seconds to show a beat before you scroll past.'
+          ],
+          items: [
+            { id: 'mu-lunes',          title: ['Lunes', 'Monday'] },
+            { id: 'mu-lunes-2',        title: ['Lunes II', 'Monday II'] },
+            { id: 'mu-miercoles',      title: ['Miércoles', 'Wednesday'] },
+            { id: 'mu-miercoles-trap', title: ['Miércoles — trap', 'Wednesday — trap'] },
+            { id: 'mu-jueves',         title: ['Jueves', 'Thursday'] },
+            { id: 'mu-viernes',        title: ['Viernes', 'Friday'] }
+          ] }
+      ]
+    }
+  ];
+
+  /* ============================================================
+     TRABAJOS — render
+     Se arma antes que el sistema de capas, asi el parallax ya
+     encuentra estas .layer al medir la pagina.
+     ============================================================ */
+  var OBRA_ITEM = {};     /* id -> { cap, grupo, item, lista, i } */
+
+  function cardHTML(it, conPie){
+    return '<button type="button" class="obra-card' + (conPie ? ' con-pie' : '') + '" data-id="' + it.id + '" data-ta="' + it.id + ':t">' +
+      '<img src="media/obra/' + it.id + '.jpg" alt="" loading="lazy" decoding="async">' +
+      '<span class="obra-play" aria-hidden="true">▶</span>' +
+      (conPie
+        ? '<span class="obra-meta"><span class="obra-meta-title" data-t="' + it.id + ':t"></span>' +
+          (it.cap ? '<span class="obra-meta-cap" data-t="' + it.id + ':c"></span>' : '') + '</span>'
+        : '') +
+    '</button>';
+  }
+
+  (function renderObra(){
+    var html = '';
+    CAPS.forEach(function(cap){
+      T(cap.id + ':k', cap.kicker);
+      T(cap.id + ':t', cap.title);
+      T(cap.id + ':x', cap.text);
+      var lista = [];
+
+      html += '<article class="capitulo" id="' + cap.id + '">';
+      html += '<header class="cap-head layer" data-depth="1">' +
+        '<p class="cap-kicker" data-t="' + cap.id + ':k"></p>' +
+        '<h3 class="cap-title" data-t="' + cap.id + ':t"></h3>' +
+        '<p class="cap-text" data-t="' + cap.id + ':x"></p>';
+      if(cap.tools){
+        html += '<ul class="cap-tools">';
+        cap.tools.forEach(function(tl, i){
+          T(cap.id + ':tool' + i, [tl[1], tl[2]]);
+          html += '<li><b>' + tl[0] + '</b><span data-t="' + cap.id + ':tool' + i + '"></span></li>';
+        });
+        html += '</ul>';
+      }
+      html += '</header>';
+
+      if(cap.tipo === 'edicion'){
+        html += '<div class="ed-list">';
+        cap.items.forEach(function(it, i){
+          T(it.id + ':t', it.title); T(it.id + ':g', it.tag); T(it.id + ':x', it.text);
+          OBRA_ITEM[it.id] = { cap: cap, grupo: null, item: it, lista: lista, i: lista.length };
+          lista.push(it.id);
+          html += '<div class="ed-row layer' + (i % 2 ? ' inv' : '') + '" data-depth=".55">' +
+            cardHTML(it, false) +
+            '<div class="ed-body">' +
+              '<p class="ed-tag" data-t="' + it.id + ':g"></p>' +
+              '<h4 class="ed-title" data-t="' + it.id + ':t"></h4>' +
+              '<p class="ed-text" data-t="' + it.id + ':x"></p>' +
+              '<div class="ed-tools">' + it.tools.map(function(t){ return '<span>' + t + '</span>'; }).join('') + '</div>' +
+            '</div>' +
+          '</div>';
+        });
+        html += '</div>';
+      } else {
+        cap.grupos.forEach(function(g, gi){
+          var gk = cap.id + ':g' + gi;
+          T(gk + ':t', g.title); T(gk + ':n', g.note);
+          html += '<div class="obra-grupo layer" data-depth=".4">' +
+            '<div class="grupo-head"><h4 class="grupo-title" data-t="' + gk + ':t"></h4><p class="grupo-note" data-t="' + gk + ':n"></p></div>' +
+            '<div class="' + (cap.tipo === 'grilla' ? 'ia-grid ' + (g.clase || '') : 'mu-strip') + '">';
+          g.items.forEach(function(it){
+            T(it.id + ':t', it.title);
+            if(it.cap) T(it.id + ':c', it.cap);
+            OBRA_ITEM[it.id] = { cap: cap, grupo: g, gk: gk, item: it, lista: lista, i: lista.length };
+            lista.push(it.id);
+            html += cardHTML(it, true);
+          });
+          html += '</div></div>';
+        });
+      }
+
+      if(cap.spotify){
+        T('mu:escuchar', ['Escuchalo entero', 'Hear it all']);
+        html += '<div class="mu-escuchar layer" data-depth=".5">' +
+          '<div class="grupo-head"><h4 class="grupo-title" data-t="mu:escuchar"></h4></div>' +
+          '<div class="spotify-wrap">' +
+            /* embed exacto provisto por Luca: theme=0 es la variante negra */
+            '<iframe id="spotify-embed" data-testid="embed-iframe"' +
+            ' src="https://open.spotify.com/embed/playlist/2zKsUjJrWrvSWNZmdrEcrz?utm_source=generator&amp;theme=0&amp;si=63dd8cc75ae345b7"' +
+            ' width="100%" height="152" frameBorder="0" allowfullscreen=""' +
+            ' allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"' +
+            ' loading="lazy" title="Spotify"></iframe>' +
+          '</div>' +
+        '</div>';
+      }
+      html += '</article>';
+    });
+    document.getElementById('obraRoot').innerHTML = html;
+  })();
+
+  /* ============================================================
+     TRABAJOS — adelanto al pasar el mouse
+     El video se crea recien al entrar (y se destruye al salir): la
+     pagina carga solo los posters, no 45 videos.
+     ============================================================ */
+  var puedeHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if(puedeHover && fullMotion){
+    document.querySelectorAll('#obraRoot .obra-card').forEach(function(card){
+      var timer = null, vid = null;
+      card.addEventListener('mouseenter', function(){
+        timer = setTimeout(function(){
+          vid = document.createElement('video');
+          vid.muted = true; vid.loop = true; vid.playsInline = true;
+          vid.setAttribute('aria-hidden', 'true');
+          vid.src = 'media/obra/' + card.dataset.id + '.mp4';
+          vid.addEventListener('playing', function(){ if(vid) vid.classList.add('on'); }, { once: true });
+          card.insertBefore(vid, card.querySelector('.obra-play'));
+          var p = vid.play(); if(p && p.catch) p.catch(function(){});
+        }, 220);   /* pasar por encima sin detenerse no descarga nada */
+      });
+      card.addEventListener('mouseleave', function(){
+        clearTimeout(timer);
+        if(vid){ vid.pause(); vid.removeAttribute('src'); vid.load(); vid.remove(); vid = null; }
+      });
+    });
+  }
+
+  /* ============================================================
+     TRABAJOS — reproductor
+     <dialog> nativo: Esc cierra, el foco vuelve a la tarjeta y se
+     dibuja en la capa superior (los transform del parallax no lo
+     afectan). Flechas del teclado para recorrer el capitulo.
+     ============================================================ */
+  var modal = document.getElementById('obraModal');
+  var modalVideo = document.getElementById('modalVideo');
+  var modalActual = null;
+
+  function tx(key){ var t = OBRA_T[key]; return t ? t[idioma] : ''; }
+
+  function modalRefrescar(){
+    if(!modalActual) return;
+    var ref = OBRA_ITEM[modalActual];
+    var it = ref.item;
+    document.getElementById('modalCount').textContent = (ref.i + 1) + ' / ' + ref.lista.length;
+    document.getElementById('modalTag').innerHTML = ref.grupo ? tx(ref.gk + ':t') : tx(it.id + ':g');
+    document.getElementById('modalTitle').innerHTML = tx(it.id + ':t');
+    var body = '';
+    if(ref.grupo){
+      if(it.cap) body += '<p class="modal-lead">' + tx(it.id + ':c') + '</p>';
+      body += '<p class="modal-text">' + tx(ref.gk + ':n') + '</p>';
+    } else {
+      body += '<p class="modal-text">' + tx(it.id + ':x') + '</p>' +
+        '<div class="ed-tools">' + it.tools.map(function(t){ return '<span>' + t + '</span>'; }).join('') + '</div>';
+    }
+    document.getElementById('modalBody').innerHTML = body;
+    document.getElementById('modalPrev').textContent = tx('modal:prev');
+    document.getElementById('modalNext').textContent = tx('modal:next');
+    document.getElementById('modalClose').setAttribute('aria-label', tx('modal:close'));
+  }
+
+  function modalMostrar(id){
+    modalActual = id;
+    modalRefrescar();
+    modalVideo.poster = 'media/obra/' + id + '.jpg';
+    modalVideo.src = 'media/obra/' + id + '.mp4';
+    var p = modalVideo.play(); if(p && p.catch) p.catch(function(){});
+  }
+
+  function modalMover(paso){
+    var ref = OBRA_ITEM[modalActual];
+    var n = ref.lista.length;
+    modalMostrar(ref.lista[(ref.i + paso + n) % n]);
+  }
+
+  document.getElementById('obraRoot').addEventListener('click', function(e){
+    var card = e.target.closest('.obra-card');
+    if(!card) return;
+    modalMostrar(card.dataset.id);
+    if(typeof modal.showModal === 'function') modal.showModal();
+    else modal.setAttribute('open', '');
+  });
+
+  /* Al cerrar hay que cortar la descarga: si no, el video sigue bajando de
+     fondo. No alcanza con escuchar el evento 'close' del dialog — Chromium lo
+     encola para el proximo cuadro de animacion, y en una pestaña que no dibuja
+     nunca llega. Por eso la limpieza se llama explicita en cada via de cierre
+     (y el 'close' queda como red, por si aparece otra). Es idempotente. */
+  function modalLimpiar(){
+    if(modalActual === null) return;
+    modalVideo.pause();
+    modalVideo.removeAttribute('src');
+    modalVideo.load();
+    modalActual = null;
+  }
+  function modalCerrar(){
+    modalLimpiar();
+    if(modal.open) modal.close();
+  }
+
+  document.getElementById('modalPrev').addEventListener('click', function(){ modalMover(-1); });
+  document.getElementById('modalNext').addEventListener('click', function(){ modalMover(1); });
+  document.getElementById('modalClose').addEventListener('click', modalCerrar);
+
+  /* click en el fondo (fuera del video y del texto) cierra */
+  modal.addEventListener('click', function(e){
+    if(e.target === modal || e.target.id === 'modalInner') modalCerrar();
+  });
+  modal.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight'){ e.preventDefault(); modalMover(1); }
+    if(e.key === 'ArrowLeft'){ e.preventDefault(); modalMover(-1); }
+    if(e.key === 'Escape'){ modalLimpiar(); }   /* el cierre lo hace el propio dialog */
+  });
+  /* El 'close' puede llegar tarde, cuando ya se abrio otra pieza: si en ese
+     momento el dialog esta abierto, es un evento viejo y no hay que tocar nada
+     (si no, limpiaria el video recien abierto). */
+  modal.addEventListener('close', function(){ if(!modal.open) modalLimpiar(); });
+
 
   /* ============================================================
      IDIOMA — ES (Argentina) / EN
@@ -986,14 +1678,6 @@
     ['.cred-label', 1, 'Diseño web', 'Web design'],
     ['.cred-label', 2, 'Edición de video', 'Video editing'],
 
-    ['#work .section-title', 0, 'Trabajos seleccionados', 'Selected work'],
-    ['#phoneHint', 0, '▶ Tocá para reproducir', '▶ Tap to play'],
-
-    ['#sound .section-title', 0, 'Producción musical', 'Music production'],
-    ['#sound > p', 0,
-      'Antes de editar video, edité canciones. Formación académica en producción musical y diseño sonoro — la base de todo lo demás.',
-      'Before I edited video, I edited songs. Formal training in music production and sound design — the foundation for everything else.'],
-
     ['#contact .section-title', 0, 'Contacto', 'Contact'],
     ['#contact > p', 0,
       '¿Tenés un proyecto en mente? Escribime.',
@@ -1004,19 +1688,6 @@
     ['footer span', 1,
       'Contenido con IA · Video · Audio · Motion',
       'AI content · Video · Audio · Motion']
-  ];
-
-  /* las tabs cambian su rotulo y tambien el pie que muestran al elegirlas */
-  var TABS_T = [
-    { es:'Edición de video', en:'Video editing',
-      capEs:'Edición de video — formato largo, reels y TikTok. Cortes, ritmo y motion graphics.',
-      capEn:'Video editing — long form, Reels and TikTok. Cuts, pacing and motion graphics.' },
-    { es:'Anuncios IA / UGC', en:'AI / UGC ads',
-      capEs:'Anuncios IA / UGC — piezas generadas y editadas con IA para marcas y productos.',
-      capEn:'AI / UGC ads — pieces generated and edited with AI for brands and products.' },
-    { es:'Producción musical', en:'Music production',
-      capEs:'Producción musical — canciones y ediciones de audio propias.',
-      capEn:'Music production — my own songs and audio edits.' }
   ];
 
   var META = {
@@ -1049,16 +1720,16 @@
       if(el) el.innerHTML = (lang === 'es') ? t[2] : t[3];
     });
 
-    var tabs = document.querySelectorAll('.tab');
-    TABS_T.forEach(function(t, i){
-      if(!tabs[i]) return;
-      tabs[i].textContent = (lang === 'es') ? t.es : t.en;
-      tabs[i].dataset.caption = (lang === 'es') ? t.capEs : t.capEn;
-      if(tabs[i].classList.contains('active')){
-        var cap = document.getElementById('workCaption');
-        if(cap) cap.textContent = tabs[i].dataset.caption;
-      }
+    /* textos de la seccion Trabajos: van por clave (data-t), no por selector */
+    document.querySelectorAll('[data-t]').forEach(function(el){
+      var t = OBRA_T[el.dataset.t];
+      if(t) el.innerHTML = t[lang];
     });
+    document.querySelectorAll('[data-ta]').forEach(function(el){
+      var t = OBRA_T[el.dataset.ta];
+      if(t) el.setAttribute('aria-label', (lang === 'es' ? 'Ver: ' : 'Watch: ') + t[lang].replace(/<[^>]+>/g, ''));
+    });
+    if(typeof modalRefrescar === 'function') modalRefrescar();
 
     document.documentElement.lang = (lang === 'es') ? 'es-AR' : 'en';
     document.title = META[lang].title;
@@ -1255,21 +1926,6 @@
       L.el.style.opacity = L.o.toFixed(3);
     }
   }
-
-  /* ============================================================
-     TILT DEL VISOR — inercia propia
-     ============================================================ */
-  var phone = document.getElementById('phone');
-  var phTx = 0, phTy = 0, phTs = 1, phX = 0, phY = 0, phS = 1;
-
-  phone.addEventListener('mousemove', function(e){
-    if(!fullMotion) return;
-    var r = phone.getBoundingClientRect();
-    phTy = ((e.clientX - r.left) / r.width - 0.5) * 20;
-    phTx = ((e.clientY - r.top) / r.height - 0.5) * -20;
-    phTs = 1.025;
-  });
-  phone.addEventListener('mouseleave', function(){ phTx = 0; phTy = 0; phTs = 1; });
 
   /* ============================================================
      FONDO LIQUIDO — WebGL: metaballs + domain warping
@@ -1509,12 +2165,6 @@
       ' rotateX(' + ((softY - 0.5) * -6).toFixed(3) + 'deg)' +
       ' rotateY(' + ((softX - 0.5) * 6).toFixed(3) + 'deg)' +
       ' scale(' + (1 - e * 0.12).toFixed(4) + ')';
-
-    phX += (phTx - phX) * 0.12;
-    phY += (phTy - phY) * 0.12;
-    phS += (phTs - phS) * 0.12;
-    phone.style.transform =
-      'rotateX(' + phX.toFixed(3) + 'deg) rotateY(' + phY.toFixed(3) + 'deg) scale(' + phS.toFixed(4) + ')';
   }
 
   requestAnimationFrame(frame);
@@ -1550,139 +2200,6 @@
       obsVideo.observe(v);
     });
   }
-
-  /* ============================================================
-     YOUTUBE
-     ============================================================ */
-  var currentList = "PLD9yW8DE2ln3zpT4TOB1lT5L_W-DyvoBn";
-  var currentCount = 0;
-  var player = null;
-  var apiReady = false;
-  var pollId = null;
-  var phoneHint = document.getElementById('phoneHint');
-  var counterEl = document.getElementById('counter');
-  var captionEl = document.getElementById('workCaption');
-
-  /* El contador sale de la playlist real, no de un numero escrito a mano:
-     si Luca agrega o saca videos, el "1 / N" se acomoda solo. */
-  function syncCounter(){
-    if(!player) return;
-    try{
-      /* getPlaylist() devuelve null mientras el player esta solo "cued":
-         el total recien aparece cuando arranca la reproduccion. Por eso el
-         indice y el total se resuelven por separado — si esperaramos a tener
-         los dos, el contador se quedaria mudo hasta que alguien de play. */
-      if(!currentCount && player.getPlaylist){
-        var pl = player.getPlaylist();
-        if(pl && pl.length) currentCount = pl.length;
-      }
-      var idx = player.getPlaylistIndex ? player.getPlaylistIndex() : -1;
-      if(idx < 0) idx = 0;
-      counterEl.textContent = (idx + 1) + ' / ' + (currentCount || '—');
-    }catch(err){}
-  }
-
-  /* Construir el player desde cero por cada playlist.
-     loadPlaylist() sobre un player creado con `list` en playerVars no cambia
-     de lista de forma fiable: la tab se marcaba activa y el video seguia
-     siendo el de la primera. Recrear usa el mismo camino que la carga
-     inicial, que si funciona, asi que cada tab carga la suya siempre. */
-  function mountPlayer(listId, autoplay){
-    if(!apiReady) return;
-    currentCount = 0;
-    counterEl.textContent = '1 / —';
-
-    if(pollId){ clearInterval(pollId); pollId = null; }
-    if(player && player.destroy){ try{ player.destroy(); }catch(err){} }
-
-    /* destroy() reemplaza el contenedor por el iframe: lo reponemos */
-    var host = document.getElementById('yt-player');
-    if(!host){
-      host = document.createElement('div');
-      host.id = 'yt-player';
-      document.getElementById('phone').insertBefore(host, phoneHint);
-    }
-
-    player = new YT.Player('yt-player', {
-      height: '100%',
-      width: '100%',
-      playerVars: {
-        listType: 'playlist',
-        list: listId,
-        playsinline: 1,
-        rel: 0,
-        autoplay: autoplay ? 1 : 0
-      },
-      events: {
-        onStateChange: function(e){
-          if(e.data === YT.PlayerState.PLAYING) phoneHint.classList.add('hidden');
-          syncCounter();   /* al arrancar ya hay total: lo tomamos enseguida */
-        },
-        onReady: function(){
-          syncCounter();
-          pollId = setInterval(syncCounter, 600);
-        }
-      }
-    });
-  }
-
-  window.onYouTubeIframeAPIReady = function(){
-    apiReady = true;
-    mountPlayer(currentList, false);
-  };
-
-  var ytTag = document.createElement('script');
-  ytTag.src = "https://www.youtube.com/iframe_api";
-  document.body.appendChild(ytTag);
-
-  document.querySelectorAll('.tab').forEach(function(tab){
-    tab.addEventListener('click', function(){
-      if(tab.classList.contains('active')) return;
-      document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
-      tab.classList.add('active');
-      currentList = tab.dataset.list;
-
-      captionEl.classList.add('swapping');
-      setTimeout(function(){
-        captionEl.textContent = tab.dataset.caption;
-        captionEl.classList.remove('swapping');
-      }, 350);
-
-      phoneHint.classList.remove('hidden');
-      mountPlayer(currentList, true);
-    });
-  });
-
-  document.getElementById('prevBtn').addEventListener('click', function(){
-    if(player && player.previousVideo) player.previousVideo();
-  });
-  document.getElementById('nextBtn').addEventListener('click', function(){
-    if(player && player.nextVideo) player.nextVideo();
-  });
-
-  var wheelLock = false;
-  phone.addEventListener('wheel', function(e){
-    e.preventDefault();
-    if(wheelLock) return;
-    wheelLock = true;
-    if(e.deltaY > 0){ if(player && player.nextVideo) player.nextVideo(); }
-    else { if(player && player.previousVideo) player.previousVideo(); }
-    setTimeout(function(){ wheelLock = false; }, 500);
-  }, { passive:false });
-
-  var touchStartY = null;
-  phone.addEventListener('touchstart', function(e){
-    touchStartY = e.touches[0].clientY;
-  }, { passive:true });
-  phone.addEventListener('touchend', function(e){
-    if(touchStartY === null) return;
-    var dy = e.changedTouches[0].clientY - touchStartY;
-    if(Math.abs(dy) > 40){
-      if(dy < 0){ if(player && player.nextVideo) player.nextVideo(); }
-      else { if(player && player.previousVideo) player.previousVideo(); }
-    }
-    touchStartY = null;
-  }, { passive:true });
 
   /* Spotify va como iframe plano con el src exacto de Luca (theme=0).
      Ya no se carga la iframe-api: era la que generaba el src por su cuenta
