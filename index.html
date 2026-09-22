@@ -690,6 +690,44 @@
     .ed-tools{ justify-content:center; }
   }
 
+  /* ---- fichas: tarjeta arriba y relato abajo, en dos columnas ---- */
+  .fichas{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:clamp(30px, 4vw, 54px);
+    text-align:left;
+  }
+  .ficha .obra-card{ max-width:230px; margin-bottom:18px; }
+  .ficha-tag{
+    font-weight:600;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--red-bright);
+    margin-bottom:9px;
+  }
+  .ficha-title{
+    font-family:'Unbounded', sans-serif;
+    text-transform:uppercase;
+    font-weight:700;
+    font-size:clamp(16px, 2.1vw, 21px);
+    letter-spacing:-.01em;
+    line-height:1.18;
+    margin-bottom:12px;
+  }
+  .ficha-text{
+    font-size:clamp(13.5px, 1.4vw, 15px);
+    line-height:1.72;
+    color:var(--fg-dim);
+  }
+  .ficha-text strong{ color:var(--fg); font-weight:700; }
+  @media (max-width:720px){
+    .fichas{ grid-template-columns:1fr; }
+    .ficha{ text-align:center; }
+    .ficha .obra-card{ margin-left:auto; margin-right:auto; }
+    .ficha .ed-tools{ justify-content:center; }
+  }
+
   /* ---- grupos (IA y musica) ---- */
   .obra-grupo{ margin-bottom:clamp(38px, 5vw, 58px); }
   .obra-grupo:last-child{ margin-bottom:0; }
@@ -1078,6 +1116,7 @@
   <p class="obra-intro layer" data-depth=".9" data-t="obra:intro"></p>
   <nav class="obra-nav layer" data-depth=".8" aria-label="Capítulos">
     <a href="#cap-edicion" data-t="cap-edicion:t"></a>
+    <a href="#cap-motion" data-t="cap-motion:t"></a>
     <a href="#cap-ia" data-t="cap-ia:t"></a>
     <a href="#cap-musica" data-t="cap-musica:t"></a>
   </nav>
@@ -1222,7 +1261,7 @@
     {
       id: 'cap-edicion', tipo: 'edicion',
       kicker: ['After Effects · Premiere Pro · Photoshop', 'After Effects · Premiere Pro · Photoshop'],
-      title:  ['Edición y motion', 'Editing & motion'],
+      title:  ['Edición y storytelling', 'Editing & storytelling'],
       text: [
         'Es donde más me divierto. En <strong>Premiere Pro</strong> armo el esqueleto: el corte, el ritmo, el color y el sonido — que es la mitad de un video aunque nadie lo note. En <strong>After Effects</strong> hago lo que no se puede filmar: motion graphics, tipografía en movimiento, escenas en 3D. Y en <strong>Photoshop</strong> preparo todo antes — mockups, recortes, assets — para que cuando llegue a la línea de tiempo lo único que quede sea animar.',
         'It\'s where I have the most fun. In <strong>Premiere Pro</strong> I build the skeleton: the cut, the pacing, the color and the sound — which is half of any video, even if nobody notices. In <strong>After Effects</strong> I make what can\'t be filmed: motion graphics, kinetic type, 3D scenes. And in <strong>Photoshop</strong> I prep everything first — mockups, cutouts, assets — so that by the time it hits the timeline, all that\'s left is to animate.'
@@ -1287,6 +1326,94 @@
           text: [
             'Un clip de podcast convertido en pieza vertical. Tipografía en magenta y verde, un plato que se vuelve reloj, pantallas partidas y siluetas para las partes más delicadas del tema. La consigna: que ningún segundo quede quieto, pero sin que se vuelva ruido.',
             'A podcast clip turned into a vertical piece. Magenta and green type, a plate that turns into a clock, split screens and silhouettes for the more sensitive parts of the topic. The rule: no second left still, without it turning into noise.'
+          ],
+          tools: ['After Effects', 'Premiere Pro'] }
+      ]
+    },
+    {
+      id: 'cap-motion', tipo: 'fichas',
+      kicker: ['After Effects · Transiciones con IA · Chroma y máscaras', 'After Effects · AI transitions · Chroma and masks'],
+      title:  ['Motion y VFX', 'Motion & VFX'],
+      text: [
+        'Acá es donde la herramienta se nota menos y el resultado más. Animo en <strong>After Effects</strong> — tipografía, íconos, gráficos que explican — y uso <strong>IA</strong> para lo que antes no se podía: transiciones que no existen en cámara, escenas que hay que inventar, recursos que llaman la atención sin romper el tono. Casi siempre el truco es el mismo: footage real donde importa, generado donde nadie se da cuenta.',
+        'This is where the tool shows least and the result shows most. I animate in <strong>After Effects</strong> — type, icons, graphics that explain — and I use <strong>AI</strong> for what used to be impossible: transitions that don\'t exist in camera, scenes you have to invent, eye-catching devices that don\'t break the tone. The trick is almost always the same: real footage where it matters, generated where nobody notices.'
+      ],
+      tools: [
+        ['After Effects',       'Motion graphics, VFX y tracking.',      'Motion graphics, VFX and tracking.'],
+        ['Transiciones con IA', 'Uniones que no existen en cámara.',     'Cuts that don\'t exist in camera.'],
+        ['Chroma y máscaras',   'Pantalla verde, roto y reemplazos.',    'Green screen, roto and replacements.']
+      ],
+      items: [
+        { id: 'mo-irregular',
+          tag: ['Transición con IA · VFX', 'AI transition · VFX'],
+          title: ['Irregular', 'Irregular'],
+          text: [
+            'Arranca en el iris de un ojo y termina en un living lleno de gente. Ese salto es una <strong>transición hecha con IA y VFX en After Effects</strong>: el ojo se abre y te deja adentro de la escena. Es la pieza que uso para explicar qué hace una transición bien puesta — no adorna, cuenta.',
+            'It opens on the iris of an eye and ends in a living room full of people. That jump is a <strong>transition built with AI and VFX in After Effects</strong>: the eye opens and drops you inside the scene. It\'s the piece I use to explain what a well-placed transition does — it doesn\'t decorate, it narrates.'
+          ],
+          tools: ['After Effects', 'IA generativa', 'VFX'] },
+        { id: 'mo-remodelacion',
+          tag: ['IA + footage real', 'AI + real footage'],
+          title: ['De obra a showroom', 'From site to showroom'],
+          text: [
+            'Una remodelación de local contada sin que se vea el corte. Está <strong>todo hecho con IA mezclado con footage real</strong>: lo que la cámara no llegó a registrar lo generé y lo pegué donde el ojo no distingue. El plano vacío se llena, la obra se vuelve showroom, y el que mira no piensa en la técnica — piensa en el espacio.',
+            'A commercial remodel told without ever showing the seam. It\'s <strong>all built with AI mixed into real footage</strong>: whatever the camera never captured, I generated and dropped where the eye can\'t tell. The empty room fills in, the site becomes a showroom, and the viewer doesn\'t think about the technique — they think about the space.'
+          ],
+          tools: ['After Effects', 'IA generativa', 'Premiere Pro'] },
+        { id: 'mo-comrey',
+          tag: ['Antes y después · IA', 'Before and after · AI'],
+          title: ['Antes y después', 'Before and after'],
+          text: [
+            'El mismo proyecto en dos tiempos. El antes y el después no van uno al lado del otro: se <strong>transforman dentro del mismo plano</strong>, con IA rellenando lo que falta y el footage real sosteniendo la verdad. Es el recurso que más vende en obra — nadie discute un resultado que vio aparecer.',
+            'The same project in two moments. Before and after don\'t sit side by side — they <strong>transform inside the same shot</strong>, with AI filling in what\'s missing and real footage holding the truth. It\'s the strongest device in construction work — nobody argues with a result they watched appear.'
+          ],
+          tools: ['After Effects', 'IA generativa'] },
+        { id: 'mo-web',
+          tag: ['Chroma · Máscaras · IA', 'Chroma · Masks · AI'],
+          title: ['Tienda en línea', 'Online store'],
+          text: [
+            'Once segundos para anunciar que la tienda ya está online. Combiné una <strong>transición con IA</strong> con <strong>pantalla verde y máscaras</strong>: la pantalla de la notebook es un reemplazo, no una captura — así el sitio se ve nítido y entra en el momento justo. Corto, cerrado, sin una sola toma de más.',
+            'Eleven seconds to announce the store is live. I combined an <strong>AI transition</strong> with <strong>green screen and masks</strong>: the laptop screen is a replacement, not a capture — so the site reads sharp and lands exactly on cue. Short, tight, not one extra shot.'
+          ],
+          tools: ['After Effects', 'Chroma', 'Máscaras', 'IA'] },
+        { id: 'mo-galpones',
+          tag: ['Motion graphics · Corporativo', 'Motion graphics · Corporate'],
+          title: ['Galpones industriales', 'Industrial warehouses'],
+          text: [
+            'Un presentador en obra y toda la información encima. Armé íconos de línea que se dibujan solos, chips que entran con cada argumento — logística, manufactura, mantenimiento mínimo — y dron para mostrar el tamaño real del parque. Una sola regla: que cada gráfico aparezca cuando la voz lo nombra, ni antes ni después.',
+            'A presenter on site with all the information layered on top. I built line icons that draw themselves, chips that enter with each argument — logistics, manufacturing, minimal maintenance — and drone shots for the real scale of the park. One rule only: every graphic lands when the voice names it, not before, not after.'
+          ],
+          tools: ['After Effects', 'Premiere Pro', 'Dron'] },
+        { id: 'mo-mitsubishi',
+          tag: ['Automotriz · Kinetic type', 'Automotive · Kinetic type'],
+          title: ['L200 Work', 'L200 Work'],
+          text: [
+            'Una pickup bajo la lluvia, barro y piedra. La edición acompaña al motor: cortes secos, tipografía que golpea con cada palabra — potencia, diseño, carga pesada — y primeros planos de neumático y suspensión para que el argumento se vea en vez de contarse. Cierra con el logo animado del concesionario.',
+            'A pickup in the rain, mud and stone. The edit follows the engine: hard cuts, type that punches with every word — power, design, heavy load — and close-ups of tire and suspension so the argument is seen instead of told. It closes on the dealership\'s animated logo.'
+          ],
+          tools: ['Premiere Pro', 'After Effects'] },
+        { id: 'mo-movilidad',
+          tag: ['Recursos con IA · Fitness', 'AI devices · Fitness'],
+          title: ['Movilidad', 'Mobility'],
+          text: [
+            'Contenido de gimnasio con la anatomía encima: músculos, articulaciones y esqueleto en neón, usados como recurso para mostrar lo que pasa adentro del cuerpo. Los números ordenan la rutina y la tipografía marca el beneficio. Es el caso donde la IA no reemplaza la toma — la explica.',
+            'Gym content with the anatomy layered on top: muscles, joints and skeleton in neon, used as a device to show what happens inside the body. Numbers order the routine and the type marks the benefit. This is the case where AI doesn\'t replace the shot — it explains it.'
+          ],
+          tools: ['After Effects', 'IA generativa', 'Premiere Pro'] },
+        { id: 'mo-bland-alexis',
+          tag: ['Motion y subs en After · En inglés', 'Motion and subs in After · In English'],
+          title: ['Bland — la llamada como ventaja', 'Bland — calls as an edge'],
+          text: [
+            'Un testimonial en inglés para un producto de llamadas con IA. Los <strong>subtítulos y todo el motion están hechos en After Effects</strong>: la palabra clave se prende en amarillo, una flecha sube cuando habla de ventaja, aparece la onda de voz justo en «voice first». Cada frase tiene su gráfico y ninguno se queda más de lo necesario.',
+            'An English testimonial for an AI calling product. The <strong>subtitles and all the motion are built in After Effects</strong>: the key word lights up yellow, an arrow climbs when she mentions an edge, the voice wave appears right on «voice first». Every line gets its graphic, and none stays longer than it should.'
+          ],
+          tools: ['After Effects', 'Premiere Pro'] },
+        { id: 'mo-bland-bianca',
+          tag: ['Motion y subs en After · En inglés', 'Motion and subs in After · In English'],
+          title: ['Bland — una llamada real', 'Bland — a real call'],
+          text: [
+            'La misma familia, otra hipótesis: acá el gráfico imita la interfaz del propio producto. Un contador de llamada corriendo, los estados «answered» y «routed to sales» entrando en el momento exacto del relato, y los subtítulos resaltando la frase que vende. Todo animado en After, sobre una toma fija.',
+            'Same family, different hypothesis: here the graphics imitate the product\'s own interface. A running call timer, the «answered» and «routed to sales» states landing exactly on cue, and subtitles highlighting the line that sells. All animated in After, over a single locked-off shot.'
           ],
           tools: ['After Effects', 'Premiere Pro'] }
       ]
@@ -1439,7 +1566,22 @@
       }
       html += '</header>';
 
-      if(cap.tipo === 'edicion'){
+      if(cap.tipo === 'fichas'){
+        html += '<div class="fichas">';
+        cap.items.forEach(function(it){
+          T(it.id + ':t', it.title); T(it.id + ':g', it.tag); T(it.id + ':x', it.text);
+          OBRA_ITEM[it.id] = { cap: cap, grupo: null, item: it, lista: lista, i: lista.length };
+          lista.push(it.id);
+          html += '<div class="ficha layer" data-depth=".5">' +
+            cardHTML(it, false) +
+            '<p class="ficha-tag" data-t="' + it.id + ':g"></p>' +
+            '<h4 class="ficha-title" data-t="' + it.id + ':t"></h4>' +
+            '<p class="ficha-text" data-t="' + it.id + ':x"></p>' +
+            '<div class="ed-tools">' + it.tools.map(function(t){ return '<span>' + t + '</span>'; }).join('') + '</div>' +
+          '</div>';
+        });
+        html += '</div>';
+      } else if(cap.tipo === 'edicion'){
         html += '<div class="ed-list">';
         cap.items.forEach(function(it, i){
           T(it.id + ':t', it.title); T(it.id + ':g', it.tag); T(it.id + ':x', it.text);
